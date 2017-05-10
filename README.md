@@ -1,2 +1,2 @@
-# IMA
-IGS Metagenome Analysis
+# IMP
+IGS Metagenomics Pipeline
