@@ -8,6 +8,16 @@ help of a local SGE grid.  Not all permutations are represented in
 this repository yet, but all four versions (single/paired, grid/no_grid)
 will appear in the near future.
 
+DISCLAIMER
+
+Until I get proper license text in place, everyone has permission to
+download, read and run this code; modify it locally all you want, but
+permission is expressly denied to -- in whole or in part -- include,
+repackage, release, publish, email, share or in any other way distribute
+either the original source or your subsequent modified version.  If this
+arrangement should be found to violate any local laws, then those will
+supersede its stated constraints.
+
 INSTALLATION
 
 1. Clone this repository onto your local machine.
