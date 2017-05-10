@@ -15,8 +15,10 @@ download, read and run this code; modify it locally all you want, but
 permission is expressly denied to -- in whole or in part -- include,
 repackage, release, publish, email, share or in any other way distribute
 either the original source or your subsequent modified version.  If this
-arrangement should be found to violate any local laws, then those will
-supersede its stated constraints.
+arrangement should be found to violate any local laws, then those laws
+will supersede the arrangement's stated constraints only to the extent
+that they conflict with the law, with all non-conflicting constraints
+to remain in place.
 
 INSTALLATION
 
