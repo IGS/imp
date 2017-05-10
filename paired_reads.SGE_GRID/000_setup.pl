@@ -16,8 +16,7 @@ chomp( my $pwd = `pwd` );
 
 # IMA installation root directory.
 
-my $INSTALL_ROOT = '/local/devel/abrady/IMA.v1.r1';
-#my $INSTALL_ROOT = '/path/to/your/install_dir';
+my $INSTALL_ROOT = '/path/to/your/install_dir';
 
 my $SGEpeArg = '-pe thread';
 
@@ -28,7 +27,7 @@ my $SGEthreadedQueue = 'threaded.q';
 # Directory containing finished scripts which will be invoked
 # during execution of the assembly pipeline.
 
-my $supportScriptPrefix = "$INSTALL_ROOT/paired_reads/support_scripts";
+my $supportScriptPrefix = "$INSTALL_ROOT/paired_reads.SGE_GRID/support_scripts";
 
 # Grid nodes to exclude during all processing.  Use of '*' wildcards to
 # specify the exclusion of all nodes matching the given pattern is
@@ -40,7 +39,7 @@ my @excludeList = ();
 # to be used to construct finished scripts for each sample to
 # be assembled.
 
-my $localScriptTemplateDir = "$INSTALL_ROOT/paired_reads/script_templates";
+my $localScriptTemplateDir = "$INSTALL_ROOT/paired_reads.SGE_GRID/script_templates";
 
 my $controlDir = '001_assembly_master_controller_scripts';
 
