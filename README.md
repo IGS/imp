@@ -5,18 +5,18 @@ This is a stable initial release of code that performs (via a combination
 of internal logic, wrappers for the khmer (0.8) package, and wrappers
 for IDBA-UD) both single- and paired-end assembly, with or without the
 help of a local SGE grid.  Not all permutations are represented in
-this repository yet, but all four versions (single/paired X grid/no_grid)
+this repository yet, but all four versions (single/paired, grid/no_grid)
 will appear in the near future.
 
 INSTALLATION
 
 1. Clone this repository onto your local machine.
 
-  a) If you have no thread-enabled SGE grid accessible to you, use the "\*.LOCAL"
-     codesets to run assemblies locally (make sure you have at least 100GB of memory).
+   a) If you have no thread-enabled SGE grid accessible to you, use the "\*.LOCAL"
+      codesets to run assemblies locally (make sure you have at least 100GB of memory).
 
-  b) If you do have a thread-enabled SGE grid available, then do the following in
-     the "paired_reads.SGE_GRID" and "unpaired_reads.SGE_GRID" subdirectories:
+   b) If you do have a thread-enabled SGE grid available, then do the following in
+      the "paired_reads.SGE_GRID" and "unpaired_reads.SGE_GRID" subdirectories:
      
     Edit 000_setup.pl:
       
