@@ -1,0 +1,2 @@
+SAMPLE_ID	1	/path/to/SAMPLE_ID.mate_1.fastq
+SAMPLE_ID	2	/path/to/SAMPLE_ID.mate_2.fastq
