@@ -54,6 +54,10 @@ if ( $memReq > 1000 ) {
 
 # PARAMETERS
 
+my $headerFixer = '$$SUPPORT_SCRIPT_PREFIX$$/uniquifyFastaHeaders.specifyMaxHeaderLength.pl';
+
+my $maxHeaderLength = 50;
+
 my $assembler = '$$SUPPORT_SCRIPT_PREFIX$$/../third_party/idba_ud';
 
 my $logDir = "$$LOG_DIR$$";
@@ -131,7 +135,17 @@ while ( not $allFinished ) {
    }
 }
 
-system("cat $asmRoot/idba-ud_assembly_*/contig.fa > $$SAMPLEID$$__FINAL_ASSEMBLY.fna");
+my $assemblyFile = "$$SAMPLEID$$__FINAL_ASSEMBLY.fna";
+
+system("cat $asmRoot/idba-ud_assembly_*/contig.fa > $assemblyFile");
+
+system("$headerFixer $assemblyFile $maxHeaderLength");
+
+my $uniqueHeaderAssemblyFile = $assemblyFile;
+
+$uniqueHeaderAssemblyFile =~ s/\.fna$/.unique_header_IDs.fna/;
+
+system("mv $uniqueHeaderAssemblyFile $assemblyFile");
 
 print "$$SAMPLEID$$.IDBA_assemblies completed successfully.\n";
 
@@ -149,17 +163,19 @@ sub checkDone {
 
    foreach my $file ( @files ) {
       
-      $file =~ /^$$SAMPLEID$$_(\d+)\.IDBA/;
+      $file =~ /_(\d+)\.IDBA-UD\.final\.fna$/;
 
       my $partitionID = $1;
 
-      chomp( my $lastErrorFile = `/bin/ls -altrF $$LOG_DIR$$/mga26_$$SAMPLEID$$\.$partitionID\.o* 2>&1 | tail -q -n1` );
+      chomp( my $lastErrorFile = `/bin/ls -altrF $logDir/mga26_$$SAMPLEID$$\.$partitionID\.o* 2>&1 | tail -q -n1` );
 
       $lastErrorFile =~ s/^.*\s+//;
 
       if ( not -e $lastErrorFile ) {
          
          # Job hasn't started yet.
+
+         print "No assembly log yet for $partitionID; waiting.\n";
 
          return 0;
 
@@ -169,17 +185,71 @@ sub checkDone {
 
          my $statusLine = `tail -q -n 1 $lastErrorFile`;
 
-         if ( $statusLine =~ /failed/ ) {
+         if ( $statusLine =~ /failed/ and not $fixedFiles->{$partitionID} ) {
             
-            # Job failed: abort pipeline.
+            # Job failed: try to recover.
 
-            print "$$SAMPLEID$$.zz26_IDBA_assembly_$partitionID failed.\n";
+            # If contig-80.fa for this partition was begun,
 
-            exit(1);
+            if ( -e "$asmRoot/idba-ud_assembly_$partitionID/contig-80.fa" ) {
+               
+               # If the assembly got as far as /finishing/ contig-80.fa (i.e. began writing contig.fa),
+
+               if ( -e "$asmRoot/idba-ud_assembly_$partitionID/contig.fa" ) {
+                  
+                  # Filter contig-80.fa to produce a sane contig.fa.
+
+                  print "Fixing contig output for partition $partitionID...";
+
+                  open IN, "<$asmRoot/idba-ud_assembly_$partitionID/contig-80.fa" or die("Can't open $asmRoot/idba-ud_assembly_$partitionID/contig-80.fa for reading.\n");
+
+                  open OUT, ">$asmRoot/idba-ud_assembly_$partitionID/contig.fa" or die("Can't open $asmRoot/idba-ud_assembly_$partitionID/contig.fa for writing.\n");
+
+                  my $recording = 0;
+
+                  while ( my $line = <IN> ) {
+                     
+                     if ( $line =~ /^>.*\sread_count_(\d+)/ ) {
+                        
+                        my $readCount = $1;
+
+                        $recording = 0;
+
+                        if ( $readCount >= $contig80readCovThreshold ) {
+                           
+                           print OUT $line;
+
+                           $recording = 1;
+                        }
+
+                     } elsif ( $recording ) {
+                        
+                        print OUT $line;
+                     }
+                  }
+
+                  close OUT;
+
+                  close IN;
+
+                  print "done.\n";
+
+                  $fixedFiles->{$partitionID} = 1;
+               }
+            }
+
+            if ( not $fixedFiles->{$partitionID} ) {
+               
+               print "$$SAMPLEID$$.zz26_IDBA_assembly_$partitionID failed.\n";
+
+               exit(1);
+            }
 
          } elsif ( $statusLine !~ /completed\s+successfully/ ) {
             
             # Job still running.
+
+            print "Job still running for $partitionID; waiting.\n";
 
             return 0;
          }

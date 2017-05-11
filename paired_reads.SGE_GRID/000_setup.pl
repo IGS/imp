@@ -16,7 +16,8 @@ chomp( my $pwd = `pwd` );
 
 # IMA installation root directory.
 
-my $INSTALL_ROOT = '/path/to/your/install_dir';
+my $INSTALL_ROOT = '/local/devel/abrady/IMA.v1.r1';
+#my $INSTALL_ROOT = '/path/to/your/install_dir';
 
 my $SGEpeArg = '-pe thread';
 

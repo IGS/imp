@@ -61,7 +61,7 @@ chomp( my $qstatResult = `($qstat -j mgaMaster.$sampleID 2>&1 ) | head -1` );
 if ( $qstatResult !~ /do\s+not\s+exist/ ) {
    
    print "\n   FATAL: A job is already on the grid, executing the pipeline for sample $sampleID.\n";
-   print   "   Its job ID is \'mgaMaster.$sampleID\'; please either kill it or allow it to complete\n";
+   print   "   Its job ID is \"mgaMaster.$sampleID\"; please either kill it or allow it to complete\n";
    print   "   before running this script.\n\n";
 
    exit(1);
@@ -77,8 +77,9 @@ if ( $lastLogFile eq '' ) {
    
    print "\n   FATAL: Couldn't find a log file for sample $sampleID.  Either it was deleted,\n";
    print   "   or an assembly pipeline for $sampleID was never begun.  You'll need to start\n";
-   print   "   the pipeline from the beginning; please use \'restart_pipeline.pl <sample ID>\' to\n";
-   print   "   do this.\n\n";
+   print   "   the pipeline from the beginning; please delete the entire \"$sampleID\" subdirectory\n";
+   print   "   and rerun \"000_setup.pl\" again to do this (note: this WILL NOT affect other running\n";
+   print   "   or completed assemblies in this project space).\n\n";
 
    exit(1);
 }
@@ -114,7 +115,9 @@ if ( $lastSuccessfulStep == $maxStepIndex ) {
 
    print "\n   FATAL: The pipeline for sample $sampleID ran successfully to completion,\n";
    print   "   according to the logfile.  If you want to restart it from scratch, please\n";
-   print   "   use \'restart_pipeline.pl <sample ID>\' to do so.\n\n";
+   print   "   delete the entire \"$sampleID\" subdirectory and rerun \"000_setup.pl\"\n";
+   print   "   again to do this (note: this WILL NOT affect other running or completed\n";
+   print   "   assemblies in this project space).\n\n";
 
    exit(1);
 
@@ -122,9 +125,10 @@ if ( $lastSuccessfulStep == $maxStepIndex ) {
    
    # No steps completed successfully.  Direct the user to another script.
    
-   print "\n   FATAL: No steps completed successfully for sample $sampleID.  You'll need to\n";
-   print   "   start the pipeline from the beginning; please use \'restart_pipeline.pl <sample ID>\'\n";
-   print   "   to do this.\n\n";
+   print "\n   FATAL: No steps completed successfully for sample $sampleID.  You'll need to start\n";
+   print   "   the pipeline from the beginning; please delete the entire \"$sampleID\" subdirectory\n";
+   print   "   and rerun \"000_setup.pl\" again to do this (note: this WILL NOT affect other running\n";
+   print   "   or completed assemblies in this project space).\n\n";
 
    exit(1);
 
@@ -139,12 +143,7 @@ if ( $lastSuccessfulStep == $maxStepIndex ) {
    # Filter the already-extant controller script to create a command subset
    # which will resume the pipeline at the appropriate step.
 
-   my $firstStepToRun = $lastSuccessfulStep + 1;
-
-   if ( $firstStepToRun < 10 ) {
-      
-      $firstStepToRun = '0' . $firstStepToRun;
-   }
+   my $firstStepToRun = sprintf("%02d", ($lastSuccessfulStep + 1));
 
    print "\nResuming pipeline for sample $sampleID:\n\n";
 
