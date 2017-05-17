@@ -16,7 +16,8 @@ chomp( my $pwd = `pwd` );
 
 # IMA installation root directory.
 
-my $INSTALL_ROOT = '/path/to/your/install_dir';
+my $INSTALL_ROOT = '/local/devel/abrady/IMA.v1.r1';
+#my $INSTALL_ROOT = '/path/to/your/install_dir';
 
 my $SGEpeArg = '-pe thread';
 
@@ -126,10 +127,6 @@ my $scriptMem = {
    'zz20_input_linker.pl' => '100M',
    # Used 30MB.  Memory independent of input size.
    'zz21_strip_partition_files.pl' => '500M',
-   # Used 7MB.  Memory independent of input size.
-   'zz22_get_read_IDs.pl' => '100M',
-   ### This is a wrapper; subprocesses do the work.  Test sample: subprocs used max ~500MB each.  Input target-ID lists ranged from 2.5MB to 19MB.
-   'zz23_retrieve_pairs.pl' => 'SUB40X:100M',
    ### Another wrapper.  Test sample: subprocs used max ~6MB each.  Input FASTQ files ranged from 28MB to 210MB; memory consumption should be independent of input size.
    'zz24_convert_fastq_to_IDBA-UD.pl' => '100M',
    ### Another wrapper.  Test sample: bottom-level subprocs used max 16GB (min 1.2GB) each.  Input FASTA files ranged from 28MB to 210MB.
@@ -146,7 +143,6 @@ my $scriptDeps = {
    'zz16_merge_partitions.sh' => '02_workDir/yy07_part2_filtered.subset.*.pmap',
    'zz17_annotate_partitions.sh' => '02_workDir/yy07_part2_filtered.pmap.merged;02_workDir/yy05_partition_1_groups.finalGroup.fa.stopfilt',
    'zz18_extract_partitions.sh' => '02_workDir/yy05_partition_1_groups.finalGroup.fa.stopfilt.part',
-   'zz23_retrieve_pairs.pl' => 'SUB:05_inputLinks/targetIDs_*.txt',
    'zz25_launch_IDBA-UD.pl' => 'SUB:05_inputLinks/*.IDBA-UD.final.fna'
 };
 
@@ -490,7 +486,7 @@ print "RUNNING STEP $scriptIndex...\\n\\n";
 
          print ASM_CONTROLLER "   \$baseMB += -s \$testFile;\n";
 
-         print ASM_CONTROLLER "}\n\n\$baseMB /= 1024;\n\n\$baseMB /= 1024;\n\n\$baseMB *= $expansionFactor;\n\ni\$baseMB = int(\$baseMB) + 1;\n\n";
+         print ASM_CONTROLLER "}\n\n\$baseMB /= 1024;\n\n\$baseMB /= 1024;\n\n\$baseMB *= $expansionFactor;\n\n\$baseMB = int(\$baseMB) + 1;\n\n";
 
          print ASM_CONTROLLER "my \$baseMem = \$baseMB;\n\nmy \$memSuffix = 'M';\n\nif ( \$baseMem > 1000 ) {\n   \n   \$baseMem /= 1024;\n\n\   \$baseMem = int(\$baseMem) + 1;\n\n   \$memSuffix = 'G';\n}\n\n";
       }

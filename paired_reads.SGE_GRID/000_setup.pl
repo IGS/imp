@@ -16,7 +16,8 @@ chomp( my $pwd = `pwd` );
 
 # IMA installation root directory.
 
-my $INSTALL_ROOT = '/path/to/your/install_dir';
+my $INSTALL_ROOT = '/local/devel/abrady/IMA.v1.r1';
+#my $INSTALL_ROOT = '/path/to/your/install_dir';
 
 my $SGEpeArg = '-pe thread';
 
@@ -507,7 +508,7 @@ print "RUNNING STEP $scriptIndex...\\n\\n";
 
          print ASM_CONTROLLER "   \$baseMB += -s \$testFile;\n";
 
-         print ASM_CONTROLLER "}\n\n\$baseMB /= 1024;\n\n\$baseMB /= 1024;\n\n\$baseMB *= $expansionFactor;\n\ni\$baseMB = int(\$baseMB) + 1;\n\n";
+         print ASM_CONTROLLER "}\n\n\$baseMB /= 1024;\n\n\$baseMB /= 1024;\n\n\$baseMB *= $expansionFactor;\n\n\$baseMB = int(\$baseMB) + 1;\n\n";
 
          print ASM_CONTROLLER "my \$baseMem = \$baseMB;\n\nmy \$memSuffix = 'M';\n\nif ( \$baseMem > 1000 ) {\n   \n   \$baseMem /= 1024;\n\n\   \$baseMem = int(\$baseMem) + 1;\n\n   \$memSuffix = 'G';\n}\n\n";
       }

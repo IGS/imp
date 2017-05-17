@@ -68,6 +68,10 @@ my $asmRoot = '06_assembly';
 
 my $scriptDir = 'zz26_IDBA_launch_scripts';
 
+my $fixedFiles = {};
+
+my $contig80readCovThreshold = 23;
+
 # EXECUTION
 
 # Delete the old assembly.
