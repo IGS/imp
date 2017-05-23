@@ -120,7 +120,7 @@ foreach my $inFile ( @inFiles ) {
 
    system("chmod 755 $launcher");
 
-   system("qsub -q all.q -l mem_free=1G -V -b y -P $$PROJECT_CODE$$ -N mga26.ctl.$$SAMPLEID$$_$partitionID -e $$LOG_DIR$$ -o $$LOG_DIR$$ -cwd $launcher");
+   system("qsub -q all.q -l mem_free=1G -V -b y -P $$PROJECT_CODE$$ -N mga26.ctl.$$SAMPLEID$$_$partitionID -e $$LOG_DIR$$ -o $$LOG_DIR$$ -cwd ./$launcher");
 }
 
 # Start checking to see whether or not the jobs have completed.

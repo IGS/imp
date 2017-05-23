@@ -145,7 +145,7 @@ system("chmod 755 $launcher");
 # sync until complete.  Invoke the launcher with its own
 # sync.
 
-if ( system("qsub -V -sync y -b y -P $$PROJECT_CODE$$ -q all.q -l mem_free=10G -N mga23a.$$SAMPLEID$$ \\\n   -e $$LOG_DIR$$ \\\n   -o $$LOG_DIR$$ -cwd \\\n   $launcher") != 0 ) {
+if ( system("qsub -V -sync y -b y -P $$PROJECT_CODE$$ -q all.q -l mem_free=10G -N mga23a.$$SAMPLEID$$ \\\n   -e $$LOG_DIR$$ \\\n   -o $$LOG_DIR$$ -cwd \\\n   ./$launcher") != 0 ) {
    
    print "$$SAMPLEID$$.zz23_retrieve_pairs.pl failed.\n";
 

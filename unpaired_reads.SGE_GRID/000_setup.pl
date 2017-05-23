@@ -16,8 +16,7 @@ chomp( my $pwd = `pwd` );
 
 # IMA installation root directory.
 
-my $INSTALL_ROOT = '/local/devel/abrady/IMA.v1.r1';
-#my $INSTALL_ROOT = '/path/to/your/install_dir';
+my $INSTALL_ROOT = '/path/to/your/install_dir';
 
 my $SGEpeArg = '-pe thread';
 
@@ -632,6 +631,12 @@ sub promptForProjectCode {
    print "Confirmed: will use SGE project code \"$pCodeVal\".\n";
 
    $projectCode = $pCodeVal;
+
+   open OUT, ">$pCodeFile" or die("Can't open $pCodeFile for writing.\n");
+
+   print OUT "$projectCode\n";
+
+   close OUT;
 }
 
 
