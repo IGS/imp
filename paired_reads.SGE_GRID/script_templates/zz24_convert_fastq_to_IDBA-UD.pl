@@ -41,6 +41,24 @@ foreach my $mateOne ( @inputFiles ) {
    my $command = "\"($converter --merge --filter $linkDir/$mateOne $linkDir/$mateTwo $linkDir/$outFile && echo FASTQ conversion completed successfully.) || echo FASTQ conversion failed.\"";
 
    system("qsub -V -sync y -b y -P $$PROJECT_CODE$$ -q all.q -l mem_free=$subprocMem -N mga24_convertFasta\_$$SAMPLEID$$_$partitionID \\\n   -e $logDir \\\n   -o $logDir -cwd \\\n   $command\n\n");
+
+   chomp( my $lastOutFile = `/bin/ls -tr $logDir/mga24_convertFasta\_$$SAMPLEID$$_$partitionID.o* | tail -q -n1` );
+
+   if ( not -e $lastOutFile ) {
+      
+      die("FASTQ conversion failed.\n");
+
+   } else {
+      
+      chomp( my $statusLine = `tail -q -n1 $lastOutFile` );
+
+      if ( $statusLine =~ /failed/ ) {
+         
+         die("FASTQ conversion failed.\n");
+      }
+   }
 }
+
+print "FASTQ conversion completed successfully.\n";
 
 
