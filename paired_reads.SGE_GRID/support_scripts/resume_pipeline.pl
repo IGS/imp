@@ -56,7 +56,7 @@ if ( -e $excludeFile ) {
 
 # Make sure the pipeline isn't currently running.
 
-chomp( my $qstatResult = `($qstat -j mgaMaster.$sampleID 2>&1 ) | head -1` );
+chomp( my $qstatResult = `$qstat -j mgaMaster.$sampleID 2>&1` );
 
 if ( $qstatResult !~ /do\s+not\s+exist/ ) {
    
