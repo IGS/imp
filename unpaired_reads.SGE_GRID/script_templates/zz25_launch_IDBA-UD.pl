@@ -249,7 +249,7 @@ sub checkDone {
                exit(1);
             }
 
-         } elsif ( $statusLine !~ /completed\s+successfully/ ) {
+         } elsif ( not $fixedFiles->{$partitionID} and $statusLine !~ /completed\s+successfully/ ) {
             
             # Job still running.
 
